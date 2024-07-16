@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .text-outline-black {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+      1px 1px 0 #000;
+  }
+  .text-outline-red {
+    text-shadow: -1px -1px 0 #ff0000, 1px -1px 0 #ff0000, -1px 1px 0 #ff0000,
+      1px 1px 0 #ff0000;
+  }
+  .text-outline-white {
+    text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff,
+      1px 1px 0 #ffffff;
+  }
+  .custom-bullet-color li::marker {
+    color: #0ea5e9; /* Cambia 'red' al color que prefieras */
+  }
+}

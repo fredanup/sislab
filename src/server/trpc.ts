@@ -29,7 +29,7 @@ const t = initTRPC.context<Context>().create({
  * Create a router
  * @link https://trpc.io/docs/v11/router
  */
-export const router = t.router;
+export const createTRPCRouter = t.router;
 
 /**
  * Create an unprotected procedure
@@ -45,7 +45,7 @@ export const mergeRouters = t.mergeRouters;
 /**
  * Protected base procedure
  */
-export const authedProcedure = t.procedure.use(function isAuthed(opts) {
+export const protectedProcedure = t.procedure.use(function isAuthed(opts) {
   const user = opts.ctx.session?.user;
 
   if (!user?.name) {
