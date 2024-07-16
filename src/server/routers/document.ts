@@ -10,6 +10,9 @@ export const documentRouter = createTRPCRouter({
     .input(z.object({ key: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { s3 } = ctx;
+      if (!ctx.session?.user?.id) {
+        throw new Error('Not authenticated');
+      }
       const userId = ctx.session.user.id;
       const { key } = input;
       const putObjectCommand = new PutObjectCommand({
@@ -24,6 +27,9 @@ export const documentRouter = createTRPCRouter({
     .input(documentSchema)
     .mutation(async ({ ctx, input }) => {
       try {
+        if (!ctx.session?.user?.id) {
+          throw new Error('Not authenticated');
+        }
         await ctx.prisma.document.create({
           data: {
             document: input.document,
