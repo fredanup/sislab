@@ -1,14 +1,10 @@
 import { signOut } from 'next-auth/react';
 
-export default function SignOut() {
+export function SignOut() {
   return (
     <div
       className="flex flex-col items-center md:flex md:flex-row md:gap-1"
-      onClick={() => {
-        signOut({ callbackUrl: '/' }).catch((error) => {
-          console.error('Error signing out:', error);
-        });
-      }}
+      onClick={() => signOut({ callbackUrl: '/' })}
     >
       <svg
         viewBox="0 0 512 512"
