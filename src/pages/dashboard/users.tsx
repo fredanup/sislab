@@ -1,4 +1,4 @@
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import DeleteUserModal from 'pages/modals/delete-user-modal';
@@ -24,7 +24,7 @@ export default function Users() {
    * Consultas a base de datos
    */
   //Obtener todos los usuarios creados con su sucursal
-  const { data: users, isLoading } = trpc.user.findManyUserBranch.useQuery();
+  const { data: users } = trpc.user.findManyUserBranch.useQuery();
   //Obtener el usuario actual
   const { data: currentUser } = trpc.user.findCurrentOne.useQuery();
 
@@ -47,9 +47,10 @@ export default function Users() {
     setDeleteIsOpen(false);
   };
   //Hook de estado utilizado para recordar qué card acaba de seleccionar el usuario
+  /*
   const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(
     null,
-  );
+  );*/
   //Inicialización de ruta
   const router = useRouter();
   //Nota: En cuanto a jerarquía de tipos tenemos: De más simple a más complejo-->Calling-->Edit-->UserCalling
@@ -61,9 +62,10 @@ export default function Users() {
    * Además guarda el valor del índice de la card seleccionada por el usuario. Este valor se utilizará posteriormente para dar color
    * a la card y el usuario entienda en qué card se encuentra
    */
-  const handleCardClick = (data: IUserBranch, index: number | null) => {
+  /*
+  const handleCardClick = (index: number | null) => {
     setSelectedCardIndex(index);
-  };
+  };*/
 
   //Redireccion al usuario a Main
   useEffect(() => {
@@ -99,7 +101,7 @@ export default function Users() {
                 <tr
                   className="border-b border-gray-200 text-sm font-light"
                   key={index}
-                  onClick={() => handleCardClick(user, index)}
+                  //onClick={() => handleCardClick(user, index)}
                 >
                   <td className="py-4 pr-2 flex flex-row gap-3 items-center text-sm font-light">
                     <Image

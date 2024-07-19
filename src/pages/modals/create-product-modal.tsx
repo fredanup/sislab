@@ -41,9 +41,9 @@ export default function CreateProductModal({
 
   useEffect(() => {
     if (selectedProduct !== null) {
-      setName(selectedProduct.name!);
-      setQuantity(selectedProduct.quantity!);
-      setPrice(selectedProduct.price!.toString());
+      setName(selectedProduct.name);
+      setQuantity(selectedProduct.quantity);
+      setPrice(selectedProduct.price.toString());
       if (laboratories) {
         const laboratoryMatchedOption = laboratories.find(
           (laboratory) => laboratory.id === selectedProduct.laboratoryId,

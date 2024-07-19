@@ -15,8 +15,7 @@ export default function SaleModal({
    */
 
   //Obtener todos los ejemplares vendidos
-  const { data: userSales, isLoading } =
-    trpc.example.findSoldExamples.useQuery(saleId);
+  const { data: userSales } = trpc.example.findSoldExamples.useQuery(saleId);
 
   if (!isOpen) {
     return null; // No renderizar el modal si no está abierto

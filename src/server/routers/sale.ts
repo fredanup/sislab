@@ -1,9 +1,12 @@
 import { prisma } from "server/prisma";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/trpc";
+import { createTRPCRouter, protectedProcedure } from "server/trpc";
 import {  saleSchema } from "utils/auth";
 
 export const saleRouter = createTRPCRouter({
   findUserSales: protectedProcedure.query(async ({ctx}) => {
+    if (!ctx.session?.user?.id) {
+      throw new Error('Not authenticated');
+    }
     const sales = await prisma.sale.findMany({
       select:{
         id:true,
@@ -25,6 +28,9 @@ export const saleRouter = createTRPCRouter({
   createSale: protectedProcedure
     .input(saleSchema)
     .mutation(async ({ ctx, input }) => {
+      if (!ctx.session?.user?.id) {
+        throw new Error('Not authenticated');
+      }
       try {
         const newSale = await ctx.prisma.sale.create({
           data: {

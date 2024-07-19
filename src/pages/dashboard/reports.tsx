@@ -33,11 +33,16 @@ export default function Reports() {
    */
   // Obtener todos los usuarios creados con su sucursal
   // Obtener todas las ventas
-  const { data: sales, isLoading: isLoadingSales } =
-    trpc.sale.findUserSales.useQuery();
+  const { data: sales } = trpc.sale.findUserSales.useQuery(); //Ventas del usuario actual
+
+  //Ejemplares de la venta indicada
   const { data: userSalesData } = trpc.example.findSoldExamples.useQuery(
     selectedSale?.id || '',
+    {
+      enabled: !!selectedSale?.id, // Habilita la consulta solo si selectedSale.id tiene un valor
+    },
   );
+
   // Actualizar userSales cuando los datos de userSalesData estén listos
   useEffect(() => {
     if (selectedSale && userSalesData) {
@@ -49,7 +54,7 @@ export default function Reports() {
   // Función asincrónica para generar el PDF
   const generatePDF = useCallback(
     async (sale: ISaleDetail) => {
-      if (!userSalesData) {
+      if (!userSales) {
         return; // Asegurarse de que userSalesData esté disponible
       }
 
@@ -85,7 +90,7 @@ export default function Reports() {
         { header: 'Precio', dataKey: 'price' },
       ];
 
-      const tableRows = userSalesData.map((item, index) => ({
+      const tableRows = userSales.map((item, index) => ({
         item: index + 1,
         product: item.Product?.name || '',
         lab: item.Product?.Laboratory?.name || '',
@@ -106,7 +111,7 @@ export default function Reports() {
 
       doc.save(`Reporte-Venta-${sale.id}.pdf`);
     },
-    [userSalesData],
+    [userSales],
   );
 
   //Función de selección de registro y apertura de modal de edición
@@ -188,11 +193,11 @@ export default function Reports() {
             </tbody>
           </table>
         </div>
-        {saleExampleIsOpen && (
+        {saleExampleIsOpen && selectedSale?.id !== undefined && (
           <SaleModal
             isOpen={saleExampleIsOpen}
             onClose={closeSaleExampleModal}
-            saleId={selectedSale?.id!}
+            saleId={selectedSale?.id}
           />
         )}
       </Layout>

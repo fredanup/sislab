@@ -1,5 +1,5 @@
 import FormTitle from 'pages/utilities/form-title';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { IMovementDetail } from 'utils/auth';
 import { trpc } from 'utils/trpc';
 
@@ -22,7 +22,7 @@ export default function CreateOutputModal({
    */
 
   //Mutación para la base de datos
-  const { data: branchs, isLoading } = trpc.branch.findMany.useQuery();
+  const { data: branchs } = trpc.branch.findMany.useQuery();
   const createMovement = trpc.movement.createOutputMovement.useMutation({
     onSettled: async () => {
       await utils.example.findUserExamples.invalidate();

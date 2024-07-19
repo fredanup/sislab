@@ -1,5 +1,5 @@
 import FormTitle from 'pages/utilities/form-title';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { trpc } from 'utils/trpc';
 
 export default function CreateIncomeModal({

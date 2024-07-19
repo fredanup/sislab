@@ -1,6 +1,5 @@
-import ModalLayout from 'pages/utilities/modal-layout';
 import { FormEvent } from 'react';
-import { IProductDetail, IUserBranch } from 'utils/auth';
+import { IProductDetail } from 'utils/auth';
 import { trpc } from 'utils/trpc';
 
 export default function DeleteProductModal({
@@ -22,7 +21,7 @@ export default function DeleteProductModal({
     event.preventDefault();
 
     if (selectedProduct !== null) {
-      deletedProduct.mutate({ id: selectedProduct!.id });
+      deletedProduct.mutate({ id: selectedProduct.id });
       onClose();
     }
   };

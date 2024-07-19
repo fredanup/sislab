@@ -1,6 +1,6 @@
 import { prisma } from "server/prisma";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/trpc";
-import { createProductSchema, editProductSchema, productSchema } from "utils/auth";
+import { createProductSchema, editProductSchema } from "utils/auth";
 import { z } from "zod";
 
 export const productRouter = createTRPCRouter({

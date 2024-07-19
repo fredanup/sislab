@@ -4,7 +4,7 @@ import ExamplesModal from 'pages/modals/examples-modal';
 
 import FormTitle from 'pages/utilities/form-title';
 import Layout from 'pages/utilities/layout';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { IProductDetail } from 'utils/auth';
 import { trpc } from 'utils/trpc';
 
@@ -26,7 +26,7 @@ export default function Products() {
    * Consultas a base de datos
    */
   //Obtener todos los usuarios creados con su sucursal
-  const { data: products, isLoading } = trpc.product.findManyProduct.useQuery();
+  const { data: products } = trpc.product.findManyProduct.useQuery();
   //Función de selección de registro y apertura de modal de edición
   const openEditModal = (product: IProductDetail | null) => {
     setSelectedProduct(product);

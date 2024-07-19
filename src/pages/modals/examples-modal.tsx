@@ -1,6 +1,5 @@
 import FormTitle from 'pages/utilities/form-title';
-import Layout from 'pages/utilities/layout';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { IMovementDetail, IProductDetail } from 'utils/auth';
 import { trpc } from 'utils/trpc';
 import CreateExampleModal from './create-example-modal';
@@ -11,7 +10,6 @@ import CreateSaleModal from './create-sale-modal';
 export default function ExamplesModal({
   isOpen,
   onClose,
-  selectedProduct,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -26,15 +24,20 @@ export default function ExamplesModal({
   const [outputIsOpen, setOutputIsOpen] = useState(false);
   const [incomeIsOpen, setIncomeIsOpen] = useState(false);
   const [sellIsOpen, setSellIsOpen] = useState(false);
-  const utils = trpc.useContext();
+
   /**
    * Consultas a base de datos
    */
   //Obtener el usuario actual
   const { data: currentUser } = trpc.user.findCurrentOne.useQuery();
   //Obtener todos los ejemplares de la sucursal del usuario actual
-  const { data: userExamples, isLoading } =
-    trpc.example.findUserExamples.useQuery(currentUser?.branchId!);
+  // Usar el hook de consulta solo si branchId está disponible
+  const { data: userExamples } = trpc.example.findUserExamples.useQuery(
+    currentUser?.branchId || '', // Pasar un string vacío si branchId es undefined
+    {
+      enabled: !!currentUser?.branchId, // Habilitar la consulta solo si branchId está disponible
+    },
+  );
 
   //Estilizado del fondo detrás del modal. Evita al usuario salirse del modal antes de elegir alguna opción
   const overlayClassName = isOpen
@@ -104,7 +107,7 @@ export default function ExamplesModal({
       setSelectedExamples([]);
     }
   };
-  const handleSelectedExamples = (data: IMovementDetail[]) => {
+  const handleSelectedExamples = () => {
     setSelectedExamples([]);
   };
   return (
@@ -138,6 +141,8 @@ export default function ExamplesModal({
                   <input
                     type="text"
                     placeholder="Ingrese producto a buscar..."
+                    onChange={(e) => setSearch(e.target.value)}
+                    value={search}
                     className="focus:shadow-outline w-full appearance-none rounded-lg border px-2 py-1 leading-tight text-gray-700 focus:outline-none"
                     required
                   />

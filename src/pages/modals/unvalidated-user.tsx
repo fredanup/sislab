@@ -1,8 +1,3 @@
-import ModalLayout from 'pages/utilities/modal-layout';
-import { FormEvent } from 'react';
-import { IUser } from 'utils/auth';
-import { trpc } from 'utils/trpc';
-
 export default function UnvalidatedUser({
   isOpen,
   onClose,

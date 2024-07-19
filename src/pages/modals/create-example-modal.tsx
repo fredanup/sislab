@@ -12,16 +12,15 @@ export default function CreateExampleModal({
   const [search, setSearch] = useState('');
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const [branchId, setBranchId] = useState<string>('');
-  const [saleId, setSaleId] = useState<string>('');
-  const [isAvailable, setIsAvailable] = useState<boolean>(true);
   const utils = trpc.useContext();
   /**
    * Consultas a base de datos
    */
   //Obtener todos los usuarios creados con su sucursal
-  const { data: products, isLoading } = trpc.product.findManyProduct.useQuery();
+  const { data: products } = trpc.product.findManyProduct.useQuery();
   //Obtener el usuario actual
   const { data: currentUser } = trpc.user.findCurrentOne.useQuery();
+
   //Mutación para la base de datos
   const createExample = trpc.example.createExample.useMutation({
     onSettled: async () => {
@@ -33,8 +32,10 @@ export default function CreateExampleModal({
   });
 
   useEffect(() => {
-    setBranchId(currentUser?.branchId!);
-  }, [currentUser?.branchId]);
+    if (currentUser) {
+      setBranchId(currentUser.branchId!);
+    }
+  }, [currentUser, currentUser?.branchId]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,8 +52,6 @@ export default function CreateExampleModal({
     onClose();
     setSelectedProductId('');
     setBranchId('');
-    setSaleId('');
-    setIsAvailable(true);
   };
 
   if (!isOpen) {

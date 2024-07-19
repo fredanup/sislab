@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 import { prisma } from 'server/prisma';
-import { editUserBranchSchema, userBranchSchema } from 'utils/auth';
+import { editUserBranchSchema } from 'utils/auth';
 
 import { z } from 'zod';
 
@@ -30,6 +30,9 @@ export const userRouter = createTRPCRouter({
     return user;
   }),
   findCurrentOne: protectedProcedure.query(async ({ ctx }) => {
+    if (!ctx.session?.user?.id) {
+      throw new Error('Not authenticated');
+    }
     const user = await prisma.user.findUnique({ where: { id: ctx.session.user.id } });
     return user;
   }),

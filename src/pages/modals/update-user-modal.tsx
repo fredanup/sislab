@@ -1,6 +1,6 @@
 import FormTitle from 'pages/utilities/form-title';
 import { FormEvent, useEffect, useState } from 'react';
-import { IBranch, IUserBranch } from 'utils/auth';
+import { IUserBranch } from 'utils/auth';
 import { trpc } from 'utils/trpc';
 import CreateBranchModal from './create-branch-modal';
 
@@ -21,7 +21,7 @@ export default function UpdateUserModal({
   const utils = trpc.useContext();
   //Mutación para la base de datos
   //Obtener todos los usuarios creados con su sucursal
-  const { data: branchs, isLoading } = trpc.branch.findMany.useQuery();
+  const { data: branchs } = trpc.branch.findMany.useQuery();
   const updateUser = trpc.user.updateUser.useMutation({
     onSettled: async () => {
       await utils.user.findManyUserBranch.invalidate();

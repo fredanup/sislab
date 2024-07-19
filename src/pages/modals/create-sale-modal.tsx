@@ -1,7 +1,6 @@
-import { Sale } from '@prisma/client';
 import FormTitle from 'pages/utilities/form-title';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { IMovementDetail, ISaleDetail } from 'utils/auth';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { IMovementDetail } from 'utils/auth';
 import { trpc } from 'utils/trpc';
 
 export default function CreateSaleModal({
@@ -15,10 +14,8 @@ export default function CreateSaleModal({
   onClose: () => void;
   handleSelectedExamples: (data: IMovementDetail[]) => void;
 }) {
-  const [branchId, setBranchId] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [discount, setDiscount] = useState<string>('');
-  const [totalPrice, setTotalPrice] = useState<string>(''); // Estado para almacenar el precio total
 
   const utils = trpc.useContext();
   /**
@@ -34,7 +31,7 @@ export default function CreateSaleModal({
       console.error('Error creating example:', error);
     },
   });
-  const { data: branchs, isLoading } = trpc.branch.findMany.useQuery();
+
   const createSale = trpc.sale.createSale.useMutation({
     onSettled: async () => {
       await utils.example.findUserExamples.invalidate();

@@ -1,11 +1,11 @@
 import { prisma } from "server/prisma";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/trpc";
-import { createExampleSchema, createMovementSchema, createProductSchema, editProductSchema, productSchema } from "utils/auth";
+import { createMovementSchema } from "utils/auth";
 import { z } from "zod";
 
 export const movementRouter = createTRPCRouter({
     //Obtener todos los ejemplares de la sucursal del usuario actual
-    findMovements: publicProcedure.input(z.string()).query(async ({input}) => {      
+    findMovements: publicProcedure.input(z.string()).query(async () => {      
       const movements = await prisma.movement.findMany();
       return movements;
     }),

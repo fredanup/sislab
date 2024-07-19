@@ -1,4 +1,3 @@
-import ModalLayout from 'pages/utilities/modal-layout';
 import { FormEvent } from 'react';
 import { IUserBranch } from 'utils/auth';
 import { trpc } from 'utils/trpc';
@@ -22,7 +21,7 @@ export default function DeleteUserModal({
     event.preventDefault();
 
     if (selectedUser !== null) {
-      deletedUser.mutate({ id: selectedUser!.id });
+      deletedUser.mutate({ id: selectedUser.id });
       onClose();
     }
   };
