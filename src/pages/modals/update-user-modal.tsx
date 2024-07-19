@@ -1,9 +1,8 @@
-import type { FormEvent } from 'react';
-import { useEffect, useState } from 'react';
-import type { IUserBranch } from 'utils/auth';
+import FormTitle from 'pages/utilities/form-title';
+import { FormEvent, useEffect, useState } from 'react';
+import { IBranch, IUserBranch } from 'utils/auth';
 import { trpc } from 'utils/trpc';
 import CreateBranchModal from './create-branch-modal';
-import FormTitle from 'utilities/form-title';
 
 export default function UpdateUserModal({
   isOpen,
@@ -22,7 +21,7 @@ export default function UpdateUserModal({
   const utils = trpc.useContext();
   //Mutación para la base de datos
   //Obtener todos los usuarios creados con su sucursal
-  const { data: branchs } = trpc.branch.findMany.useQuery();
+  const { data: branchs, isLoading } = trpc.branch.findMany.useQuery();
   const updateUser = trpc.user.updateUser.useMutation({
     onSettled: async () => {
       await utils.user.findManyUserBranch.invalidate();
@@ -128,27 +127,37 @@ export default function UpdateUserModal({
             <div className="flex items-center">
               <input
                 type="radio"
-                id="employer"
-                value="employer"
-                checked={role === 'employer'}
+                id="admin"
+                value="Administrador"
+                checked={role === 'Administrador'}
                 onChange={(event) => setRole(event.target.value)}
                 className="mr-2"
               />
-              <label htmlFor="employer" className="mr-4">
-                Empleador
+              <label htmlFor="admin" className="mr-4">
+                Administrador
               </label>
 
               <input
                 type="radio"
-                id="applicant"
-                value="applicant"
-                checked={role === 'applicant'}
+                id="supervisor"
+                value="Supervisor"
+                checked={role === 'Supervisor'}
                 onChange={(event) => setRole(event.target.value)}
                 className="mr-2"
               />
-              <label htmlFor="applicant" className="mr-4">
-                Postulante
+              <label htmlFor="supervisor" className="mr-4">
+                Supervisor
               </label>
+
+              <input
+                type="radio"
+                id="vendedor"
+                value="Vendedor"
+                checked={role === 'Vendedor'}
+                onChange={(event) => setRole(event.target.value)}
+                className="mr-2"
+              />
+              <label htmlFor="vendedor">Vendedor</label>
             </div>
           </div>
 
@@ -180,7 +189,7 @@ export default function UpdateUserModal({
                 )}
                 {branchs?.map((branch) => (
                   <option key={branch.id} value={branch.id}>
-                    {branch.name}
+                    {branch.address}
                   </option>
                 ))}
               </select>

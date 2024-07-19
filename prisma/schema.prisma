@@ -29,65 +29,96 @@ model Post {
   updatedAt DateTime @unique @default(now())
 }
 
-model Branch {
-  id      String  @id @default(cuid())
-  name    String
-  address String?
-  users   User[]
+model Laboratory {
+  id       String    @id @default(cuid())
+  name     String
+  products Product[]
 }
 
-model Document {
-  id        String   @id @default(cuid())
-  document  String   @unique
-  key       String?
-  createdAt DateTime @default(now())
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+model Presentation {
+  id           String    @id @default(cuid())
+  presentation String
+  products     Product[]
 }
 
-model Calling {
-  id           String   @id @default(cuid())
-  requirement  String
-  min_exp_work Int
-  User         User?    @relation(fields: [userId], references: [id])
-  userId       String?
-  createdAt    DateTime @default(now())
-  resultAt     DateTime
-  expiresAt    DateTime
+model Product {
+  id             String        @id @default(cuid())
+  name           String
+  quantity       String
+  price          Float
+  laboratoryId   String?
+  Laboratory     Laboratory?   @relation(fields: [laboratoryId], references: [id])
+  presentationId String?
+  Presentation   Presentation? @relation(fields: [presentationId], references: [id])
+  examples       Example[]
 }
 
-model JobApplication {
+model Sale {
+  id         String    @id @default(cuid())
+  buyerId    String
+  discount   Float
+  finalPrice Float
+  saleDate   DateTime  @default(now())
+  examples   Example[]
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+model Example {
+  id          String     @id @default(cuid())
+  Product     Product    @relation(fields: [productId], references: [id])
+  productId   String
+  Sale        Sale?      @relation(fields: [saleId], references: [id])
+  saleId      String?
+  Branch      Branch     @relation(fields: [branchId], references: [id])
+  branchId    String
+  Movements   Movement[]
+  isAvailable Boolean
+}
+
+model Movement {
   id            String   @id @default(cuid())
-  status        String?
-  resumeKey     String?
-  createdAt     DateTime @default(now())
-  review        Boolean //Fue revisada la postulación?
-  interviewAt   DateTime
-  interviewLink String?
-  Postulant     User?    @relation(fields: [postulantId], references: [id])
-  postulantId   String?
+  moveType      String
+  moveDate      DateTime @default(now())
+  moveStatus    String
+  Provenance    Branch?  @relation(name: "Provenance", fields: [provenanceId], references: [id])
+  provenanceId  String?
+  Destination   Branch?  @relation(name: "Destination", fields: [destinationId], references: [id])
+  destinationId String?
+  Example       Example? @relation(fields: [exampleId], references: [id])
+  exampleId     String?
+}
+
+model Branch {
+  id          String     @id @default(cuid())
+  name        String
+  address     String?
+  users       User[]
+  provenance  Movement[] @relation(name: "Provenance")
+  destination Movement[] @relation(name: "Destination")
+  Examples    Example[]
 }
 
 model User {
-  id              String           @id @default(cuid())
-  name            String?
-  lastName        String?
-  email           String           @unique
-  emailVerified   DateTime?
-  image           String?
-  //Role de usuario: applicant:Postulante, employer: Empleador
-  role            String           @default("applicant")
-  accounts        Account[]
-  sessions        Session[]
+  id            String          @id @default(cuid())
+  name          String?
+  lastName      String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  //Role de usuario: Supervisor, administrador, vendedor
+  role          String?
+  accounts      Account[]
+  sessions      Session[]
   // Optional for WebAuthn support
-  Authenticator   Authenticator[]
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  Branch          Branch?          @relation(fields: [branchId], references: [id])
-  branchId        String?
-  callings        Calling[]
-  jobApplications JobApplication[]
-  documents       Document[]
+  Authenticator Authenticator[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Branch    Branch?  @relation(fields: [branchId], references: [id])
+  branchId  String?
+  sales     Sale[]
 }
 
 model Account {
@@ -119,6 +150,14 @@ model Session {
   updatedAt    DateTime @updatedAt
 }
 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
 // Optional for WebAuthn support
 model Authenticator {
   id                   String  @id @default(cuid())
@@ -132,12 +171,4 @@ model Authenticator {
   transports           String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@id([identifier, token])
 }

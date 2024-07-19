@@ -1,65 +1,60 @@
 import FormTitle from 'pages/utilities/form-title';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { trpc } from 'utils/trpc';
 
-export default function CreateBranchModal({
+export default function CreateIncomeModal({
   isOpen,
   onClose,
 }: {
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const [name, setName] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
+  const [exampleId, setExampleId] = useState('');
 
   const utils = trpc.useContext();
-  const createBranch = trpc.branch.createBranch.useMutation({
+  /**
+   * Consultas a base de datos
+   */
+
+  //Mutación para la base de datos
+  const createMovement = trpc.movement.createIncomeMovement.useMutation({
     onSettled: async () => {
-      await utils.branch.findMany.invalidate();
+      await utils.example.findUserExamples.invalidate();
+    },
+    onError: (error) => {
+      console.error('Error creating example:', error);
     },
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const branchData = {
-      name: name,
-      address: address,
-    };
-
-    createBranch.mutate(branchData);
+    createMovement.mutate(exampleId);
 
     onClose();
-    setName('');
-    setAddress('');
+    setExampleId('');
   };
+
   if (!isOpen) {
     return null; // No renderizar el modal si no está abierto
   }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-30">
       <form
         className="w-11/12 md:w-1/2 flex flex-col gap-2 rounded-lg bg-white p-6 drop-shadow-lg"
         onSubmit={handleSubmit}
       >
-        <FormTitle text="Nueva sucursal" />
+        <FormTitle text="Nuevo ingreso" />
 
         <div className="flex flex-col gap-2">
-          <label className="text-black text-sm font-bold">Nombre:</label>
+          <label className="text-black text-sm font-bold">
+            Código de producto:
+          </label>
           <input
             type="text"
             className="focus:shadow-outline w-full appearance-none rounded-lg border px-2 py-1 leading-tight text-gray-700 focus:outline-none"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            required
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="text-black text-sm font-bold">Dirección:</label>
-          <input
-            type="text"
-            className="focus:shadow-outline w-full appearance-none rounded-lg border px-2 py-1 leading-tight text-gray-700 focus:outline-none"
-            value={address}
-            onChange={(event) => setAddress(event.target.value)}
+            value={exampleId}
+            onChange={(event) => setExampleId(event.target.value)}
             required
           />
         </div>

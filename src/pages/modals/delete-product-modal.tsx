@@ -1,27 +1,28 @@
-import type { FormEvent } from 'react';
-import type { IEditCalling } from 'utils/auth';
+import ModalLayout from 'pages/utilities/modal-layout';
+import { FormEvent } from 'react';
+import { IProductDetail, IUserBranch } from 'utils/auth';
 import { trpc } from 'utils/trpc';
 
-export default function DeleteCallingModal({
+export default function DeleteProductModal({
   isOpen,
   onClose,
-  selectedCalling,
+  selectedProduct,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  selectedCalling: IEditCalling | null;
+  selectedProduct: IProductDetail | null;
 }) {
   const utils = trpc.useContext();
-  const deletedCalling = trpc.calling.deleteOneCalling.useMutation({
+  const deletedProduct = trpc.product.deleteOne.useMutation({
     onSettled: async () => {
-      await utils.calling.findUserCallings.invalidate();
+      await utils.product.findManyProduct.invalidate();
     },
   });
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (selectedCalling !== null) {
-      deletedCalling.mutate({ id: selectedCalling.id });
+    if (selectedProduct !== null) {
+      deletedProduct.mutate({ id: selectedProduct!.id });
       onClose();
     }
   };
@@ -51,11 +52,11 @@ export default function DeleteCallingModal({
 
               <div className="w-full flex flex-col gap-2">
                 <h1 className="text-black text-base font-semibold">
-                  Eliminar convocatoria
+                  Eliminar producto
                 </h1>
                 <p className="text-sm font-light text-gray-500 text-justify">
                   ¿Esta seguro de eliminar el registro seleccionado? Todos los
-                  datos de la convocatoria serán removidos permanentemente del
+                  datos del producto serán removidos permanentemente del
                   servidor. Esta acción no se puede deshacer.
                 </p>
                 <div className="mt-4 pt-4 flex flex-row justify-end gap-2 border-t border-gray-200">

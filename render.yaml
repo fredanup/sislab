@@ -2,7 +2,7 @@
 # previewsExpireAfterDays: 7 # automatically delete the environment after the specified number of days of inactivity
 services:
   - type: web
-    name: pacific-security
+    name: sislab
     env: node
     plan: free
     # NODE_ENV is development here in order for pnpm to install dev deps
@@ -17,10 +17,10 @@ services:
         value: production
       - key: DATABASE_URL
         fromDatabase:
-          name: pacific-security-db
+          name: sislab-db
           property: connectionString
-      - fromGroup: pacific-security-env
+      - fromGroup: sislab-env
 databases:
-  - name: pacific-security-db
+  - name: sislab-db
     plan: starter
     # plan: free

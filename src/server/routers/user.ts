@@ -1,12 +1,12 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
-import { prisma } from '../prisma';
-import { editUserBranchSchema } from '../../utils/auth';
+import { prisma } from 'server/prisma';
+import { editUserBranchSchema, userBranchSchema } from 'utils/auth';
 
 import { z } from 'zod';
 
 export const userRouter = createTRPCRouter({
   //Listar a los usuarios con su sucursal adjunta
-  findManyUserBranch: protectedProcedure.query(async () => {
+  findManyUserBranch: publicProcedure.query(async () => {
     const users = await prisma.user.findMany({
       select:{
         id:true,
@@ -30,12 +30,7 @@ export const userRouter = createTRPCRouter({
     return user;
   }),
   findCurrentOne: protectedProcedure.query(async ({ ctx }) => {
-    console.log('Session in findCurrentOne:', ctx.session);
-    if (!ctx.session?.user?.id) {
-      throw new Error('Not authenticated');
-    }
     const user = await prisma.user.findUnique({ where: { id: ctx.session.user.id } });
-    console.log('User in findCurrentOne:', user);
     return user;
   }),
   updateUser: protectedProcedure
@@ -47,7 +42,7 @@ export const userRouter = createTRPCRouter({
           data: {
             name: input.name,
             lastName: input.lastName,
-            role:input.role!,
+            role:input.role,
             branchId:input.branchId      
           },
         });

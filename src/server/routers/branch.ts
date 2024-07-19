@@ -1,7 +1,7 @@
-import { createTRPCRouter, publicProcedure } from '../trpc';
-import { prisma } from '../prisma';
-
 import { z } from 'zod';
+import { createTRPCRouter, publicProcedure } from '../trpc';
+import { prisma } from 'server/prisma';
+
 
 export const branchRouter = createTRPCRouter({
   //Listar a los usuarios con su sucursal adjunta
@@ -26,4 +26,7 @@ export const branchRouter = createTRPCRouter({
       console.log(error);
     }
   }),
+
+
+
 });

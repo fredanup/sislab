@@ -1,14 +1,13 @@
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import DeleteUserModal from 'pages/modals/delete-user-modal';
 import ErrorDeletingUser from 'pages/modals/error-deleting-user';
 import UpdateUserModal from 'pages/modals/update-user-modal';
-
+import FormTitle from 'pages/utilities/form-title';
+import Layout from 'pages/utilities/layout';
 import { useEffect, useState } from 'react';
-import FormTitle from 'utilities/form-title';
-import Layout from 'utilities/layout';
-import type { IUserBranch } from 'utils/auth';
+import { IUserBranch } from 'utils/auth';
 
 import { trpc } from 'utils/trpc';
 
@@ -25,11 +24,9 @@ export default function Users() {
    * Consultas a base de datos
    */
   //Obtener todos los usuarios creados con su sucursal
-  const { data: users } = trpc.user.findManyUserBranch.useQuery();
+  const { data: users, isLoading } = trpc.user.findManyUserBranch.useQuery();
   //Obtener el usuario actual
-  const { data: currentUser } = trpc.user.findOne.useQuery(
-    session?.user?.id ?? '',
-  );
+  const { data: currentUser } = trpc.user.findCurrentOne.useQuery();
 
   //Función de selección de registro y apertura de modal de edición
   const openEditModal = (user: IUserBranch) => {
@@ -50,11 +47,9 @@ export default function Users() {
     setDeleteIsOpen(false);
   };
   //Hook de estado utilizado para recordar qué card acaba de seleccionar el usuario
-
   const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(
     null,
   );
-
   //Inicialización de ruta
   const router = useRouter();
   //Nota: En cuanto a jerarquía de tipos tenemos: De más simple a más complejo-->Calling-->Edit-->UserCalling
@@ -73,9 +68,9 @@ export default function Users() {
   //Redireccion al usuario a Main
   useEffect(() => {
     if (currentUser) {
-      if (currentUser.role === 'applicant') {
+      if (currentUser.role === 'Vendedor') {
         // Si el usuario está autenticado, redirigir a la página protegida
-        router.replace('/dashboard/callings').catch((error) => {
+        router.replace('/dashboard/products').catch((error) => {
           // Manejar cualquier error que pueda ocurrir al redirigir
           console.error('Error al redirigir a la página principal:', error);
         });
@@ -88,19 +83,19 @@ export default function Users() {
   return (
     <>
       <Layout>
-        <FormTitle text={'Gestión de usuarios' + selectedCardIndex} />
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead className="border-b border-gray-200 text-left text-black text-sm font-light">
-              <tr>
-                <th className="py-4 pr-2">Usuarios</th>
-                <th className="py-4 pr-2">Rol</th>
-                <th className="py-4 pr-2">Sucursal</th>
-                <th className="py-4 pr-2">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users?.map((user, index) => (
+        <FormTitle text="Gestión de usuarios" />
+        <table className="table-auto">
+          <thead className="border-b border-gray-200 text-left text-black text-sm font-light">
+            <tr>
+              <th className="py-4 pr-2">Usuarios</th>
+              <th className="py-4 pr-2">Rol</th>
+              <th className="py-4 pr-2">Sucursal</th>
+              <th className="py-4 pr-2">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users?.map((user, index) => (
+              <>
                 <tr
                   className="border-b border-gray-200 text-sm font-light"
                   key={index}
@@ -115,16 +110,12 @@ export default function Users() {
                       alt="User Avatar"
                     />
                     <div className="flex flex-col">
-                      <p className="font-medium">
-                        {user.name} {user.lastName}
-                      </p>
+                      <p className="font-medium">{user.name}</p>
                       <p className="font-light text-xs">{user.email}</p>
                     </div>
                   </td>
-                  <td className="py-4 pr-2">
-                    {user.role === 'employer' ? 'Empleador' : 'Postulante'}
-                  </td>
-                  <td className="py-4 pr-2">{user.Branch?.name}</td>
+                  <td className="py-4 pr-2">{user.role}</td>
+                  <td className="py-4 pr-2">{user.Branch?.address}</td>
                   <td className="py-4 text-sky-500 underline">
                     <button
                       className="underline mr-4"
@@ -146,11 +137,10 @@ export default function Users() {
                     </button>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+              </>
+            ))}
+          </tbody>
+        </table>
         {editIsOpen && (
           <UpdateUserModal
             isOpen={editIsOpen}
