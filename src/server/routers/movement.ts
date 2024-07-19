@@ -1,6 +1,6 @@
-import { prisma } from "server/prisma";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "server/trpc";
-import { createMovementSchema } from "utils/auth";
+import { prisma } from "../prisma";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createMovementSchema } from "../../utils/auth";
 import { z } from "zod";
 
 export const movementRouter = createTRPCRouter({

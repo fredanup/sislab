@@ -1,6 +1,6 @@
-import { prisma } from "server/prisma";
-import { createTRPCRouter, protectedProcedure } from "server/trpc";
-import {  saleSchema } from "utils/auth";
+import { prisma } from "../prisma";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
+import {  saleSchema } from "../../utils/auth";
 
 export const saleRouter = createTRPCRouter({
   findUserSales: protectedProcedure.query(async ({ctx}) => {

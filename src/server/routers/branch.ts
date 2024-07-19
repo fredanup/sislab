@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '../trpc';
-import { prisma } from 'server/prisma';
+import { prisma } from '../prisma';
 
 
 export const branchRouter = createTRPCRouter({

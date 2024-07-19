@@ -1,5 +1,5 @@
-import { prisma } from "server/prisma";
-import { createTRPCRouter, publicProcedure } from "server/trpc";
+import { prisma } from "../prisma";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 
 export const laboratoryRouter = createTRPCRouter({
