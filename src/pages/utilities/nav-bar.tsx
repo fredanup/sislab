@@ -1,8 +1,9 @@
 import Image from 'next/image';
-import { SignOut } from './signout-button';
+
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { trpc } from 'utils/trpc';
+import SignOut from './signout-button';
 
 export default function NavBar() {
   //Obtenemos la sesión de la bd

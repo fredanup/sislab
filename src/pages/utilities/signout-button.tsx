@@ -1,6 +1,6 @@
 import { signOut } from 'next-auth/react';
 
-export function SignOut() {
+export default function SignOut() {
   return (
     <div
       className="flex flex-col items-center md:flex md:flex-row md:gap-1"
