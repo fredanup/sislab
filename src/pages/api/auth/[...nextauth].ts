@@ -2,15 +2,15 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth from 'next-auth';
 import type { AppProviders } from 'next-auth/providers';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import GithubProvider from 'next-auth/providers/github';
+
 import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from 'server/prisma';
 
 let useMockProvider = process.env.NODE_ENV === 'test';
-const { GITHUB_CLIENT_ID, GITHUB_SECRET, NODE_ENV, APP_ENV, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET} = process.env;
+const {NODE_ENV, APP_ENV, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET} = process.env;
 if (
   (NODE_ENV !== 'production' || APP_ENV === 'test') &&
-  (!GITHUB_CLIENT_ID || !GITHUB_SECRET || !GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET)
+  (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET)
 ) {
   console.log('⚠️ Using mocked GitHub auth correct credentials were not added');
   useMockProvider = true;
@@ -38,22 +38,11 @@ if (useMockProvider) {
     }),
   );
 } else {
-  if (!GITHUB_CLIENT_ID || !GITHUB_SECRET || !GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+  if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
     throw new Error('Providers CLIENT_ID and SECRET must be set');
   }
   providers.push(
-    GithubProvider({
-      clientId: GITHUB_CLIENT_ID,
-      clientSecret: GITHUB_SECRET,
-      profile(profile) {
-        return {
-          id: profile.id,
-          name: profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-        } as any;
-      },
-    }),
+
     GoogleProvider({
       clientId: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
