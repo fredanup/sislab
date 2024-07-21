@@ -55,7 +55,7 @@ export default function CreateSaleModal({
     });
 
     const discountAmount = parseFloat(discount) || 0;
-    const discountedPrice = totalAmount * (1 - discountAmount / 100);
+    const discountedPrice = totalAmount - discountAmount;
     return discountedPrice.toFixed(2); // Redondear el precio total a dos decimales
   };
 
