@@ -189,7 +189,7 @@ export default function UpdateUserModal({
                 )}
                 {branchs?.map((branch) => (
                   <option key={branch.id} value={branch.id}>
-                    {branch.address}
+                    {branch.name}
                   </option>
                 ))}
               </select>
