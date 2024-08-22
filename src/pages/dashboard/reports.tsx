@@ -6,6 +6,7 @@ import { trpc } from 'utils/trpc';
 import { jsPDF } from 'jspdf';
 import { ISaleDetail } from 'utils/auth';
 import 'jspdf-autotable';
+import { useSession } from 'next-auth/react';
 
 interface IProduct {
   name: string;
@@ -25,6 +26,8 @@ interface IUserSale {
 }
 
 export default function Reports() {
+  //Obtenemos la sesión de la bd
+  const { status } = useSession();
   const [saleExampleIsOpen, setSaleExampleIsOpen] = useState(false);
   const [selectedSaleForModal, setSelectedSaleForModal] =
     useState<ISaleDetail | null>(null);
@@ -33,7 +36,9 @@ export default function Reports() {
   const [userSales, setUserSales] = useState<IUserSale[]>([]);
   const [isPDFReady, setIsPDFReady] = useState(false);
 
-  const { data: sales } = trpc.sale.findUserSales.useQuery();
+  const { data: sales } = trpc.sale.findUserSales.useQuery(undefined, {
+    enabled: status === 'authenticated',
+  });
   const { data: userSalesData } = trpc.example.findSoldExamples.useQuery(
     selectedSaleForPDF?.id || '',
     {

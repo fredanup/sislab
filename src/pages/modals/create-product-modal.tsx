@@ -227,7 +227,7 @@ export default function CreateProductModal({
 
           <div className="flex flex-col gap-2">
             <label className="text-black text-sm font-bold">
-              Cantidad por unidad:
+              Cantidad por presentación:
             </label>
             <input
               type="text"

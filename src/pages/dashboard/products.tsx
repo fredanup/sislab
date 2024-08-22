@@ -72,7 +72,7 @@ export default function Products() {
                 openMovementModal();
               }}
             >
-              Movimientos
+              Inventario
             </button>
 
             <button
