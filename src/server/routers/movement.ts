@@ -29,10 +29,28 @@ export const movementRouter = createTRPCRouter({
           },
         });
         // Actualización de la tabla example
-        await prisma.example.update({
+        const example=await prisma.example.update({
           where: { id: input.exampleId! },
           data: { isAvailable: false },
         });
+         // Verificar si ya existe un registro en Stock para este producto y sucursal
+         const existingStock = await ctx.prisma.stock.findFirst({
+          where: {
+            productId: example.productId,
+            branchId: example.branchId,
+          },
+        });
+        if (existingStock) {
+          // Si existe, disminuir el stock en 1
+          await ctx.prisma.stock.update({
+            where: {
+              id: existingStock.id, // Asumiendo que 'id' es el identificador de la tabla 'Stock'
+            },
+            data: {
+              stock: { decrement: 1 },
+            },
+          });
+        }
       } catch (error) {
         console.log(error);
       }
@@ -58,10 +76,37 @@ export const movementRouter = createTRPCRouter({
               },
             });
             // Actualización de la tabla example
-            await prisma.example.update({
+            const example=await prisma.example.update({
               where: { id: input },
               data: { isAvailable: true, branchId:movement.destinationId! },
             });
+             // Verificar si ya existe un registro en Stock para este producto y sucursal
+            const existingStock = await ctx.prisma.stock.findFirst({
+              where: {
+                productId: example.productId,
+                branchId: example.branchId,
+              },
+            });
+            if (existingStock) {
+              // Si existe, incrementar el stock en 1
+              await ctx.prisma.stock.update({
+                where: {
+                  id: existingStock.id, // Asumiendo que 'id' es el identificador de la tabla 'Stock'
+                },
+                data: {
+                  stock: { increment: 1 },
+                },
+              });
+            } else {
+              // Si no existe, crear un nuevo registro de stock
+              await ctx.prisma.stock.create({
+                data: {
+                  stock: 1,
+                  branchId: example.branchId,
+                  productId: example.productId,
+                },
+              });
+            }
           }
          
         }

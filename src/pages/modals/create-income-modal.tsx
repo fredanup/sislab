@@ -20,6 +20,7 @@ export default function CreateIncomeModal({
   const createMovement = trpc.movement.createIncomeMovement.useMutation({
     onSettled: async () => {
       await utils.example.findUserExamples.invalidate();
+      await utils.product.findManyProduct.invalidate();
     },
     onError: (error) => {
       console.error('Error creating example:', error);

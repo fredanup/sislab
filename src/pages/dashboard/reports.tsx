@@ -67,7 +67,7 @@ export default function Reports() {
 
       doc.setFontSize(12);
       doc.text(`Nro. de venta: ${sale.id}`, 10, 40);
-      doc.text(`Descuento: ${sale.discount}%`, 10, 50);
+      doc.text(`Descuento: - ${sale.discount} soles`, 10, 50);
       doc.text(`Precio final: ${sale.finalPrice}`, 10, 60);
       doc.text(
         `Fecha: ${new Date(sale.saleDate).toLocaleDateString()}`,

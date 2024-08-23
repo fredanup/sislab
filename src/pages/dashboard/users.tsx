@@ -117,7 +117,7 @@ export default function Users() {
                     </div>
                   </td>
                   <td className="py-4 pr-2">{user.role}</td>
-                  <td className="py-4 pr-2">{user.Branch?.address}</td>
+                  <td className="py-4 pr-2">{user.Branch?.name}</td>
                   <td className="py-4 text-sky-500 underline">
                     <button
                       className="underline mr-4"

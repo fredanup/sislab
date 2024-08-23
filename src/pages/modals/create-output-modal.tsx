@@ -22,10 +22,11 @@ export default function CreateOutputModal({
    */
 
   //Mutación para la base de datos
-  const { data: branchs } = trpc.branch.findMany.useQuery();
+  const { data: branchs } = trpc.branch.findOtherBranches.useQuery();
   const createMovement = trpc.movement.createOutputMovement.useMutation({
     onSettled: async () => {
       await utils.example.findUserExamples.invalidate();
+      await utils.product.findManyProduct.invalidate();
     },
     onError: (error) => {
       console.error('Error creating example:', error);
@@ -91,7 +92,7 @@ export default function CreateOutputModal({
               </option>
               {branchs?.map((branch) => (
                 <option key={branch.id} value={branch.id}>
-                  {branch.address}
+                  {branch.name}
                 </option>
               ))}
             </select>

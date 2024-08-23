@@ -51,6 +51,7 @@ model Product {
   presentationId String?
   Presentation   Presentation? @relation(fields: [presentationId], references: [id])
   examples       Example[]
+  Stocks         Stock[]
 }
 
 model Sale {
@@ -60,9 +61,8 @@ model Sale {
   finalPrice Float
   saleDate   DateTime  @default(now())
   examples   Example[]
-
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     String?
 }
 
 model Example {
@@ -90,6 +90,16 @@ model Movement {
   exampleId     String?
 }
 
+//Esta tabla es necesaria para controlar el stock de cada sucursal 
+model Stock {
+  id        String   @id @default(cuid())
+  stock     Int
+  Branch    Branch?  @relation(fields: [branchId], references: [id])
+  branchId  String?
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+}
+
 model Branch {
   id          String     @id @default(cuid())
   name        String
@@ -98,6 +108,7 @@ model Branch {
   provenance  Movement[] @relation(name: "Provenance")
   destination Movement[] @relation(name: "Destination")
   Examples    Example[]
+  Stocks      Stock[]
 }
 
 model User {

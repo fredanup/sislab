@@ -4,9 +4,17 @@ import { createProductSchema, editProductSchema } from "../../utils/auth";
 import { z } from "zod";
 
 export const productRouter = createTRPCRouter({
-    //Listar a los usuarios con su sucursal adjunta
-    findManyProduct: publicProcedure.query(async () => {
-      const products = await prisma.product.findMany({
+    //Listar a los usuarios con el stock de la sucursal del usuario actual
+    findManyProduct: protectedProcedure.query(async ({ctx}) => {
+      if (!ctx.session?.user?.id) {
+        throw new Error('Not authenticated');
+      }
+      const user = await prisma.user.findUnique({ where: { id: ctx.session.user.id } });
+      if (!user) {
+        throw new Error('User not found');
+      }
+      
+      const products = await ctx.prisma.product.findMany({
         select:{
           id:true,
           name:true,
@@ -15,7 +23,16 @@ export const productRouter = createTRPCRouter({
           laboratoryId:true,
           Laboratory:true,
           presentationId:true,
-          Presentation:true
+          Presentation:true,
+          Stocks: {
+            select: {
+              stock:true,   
+                      
+            },
+            where: {
+              branchId:user.branchId
+            }
+          }
         },
     
       });

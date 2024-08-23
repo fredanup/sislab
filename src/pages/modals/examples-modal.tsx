@@ -120,7 +120,7 @@ export default function ExamplesModal({
             <form className="w-11/12 md:w-1/2 flex flex-col gap-2 rounded-lg bg-white p-6 drop-shadow-lg">
               {/**Header y botón de cierre */}
               <div className="flex flex-row justify-between">
-                <FormTitle text="Movimientos" />
+                <FormTitle text="Inventario" />
                 <svg
                   viewBox="0 0 640 512"
                   className={`h-8 w-8 cursor-pointer fill-gray-500 p-1.5  `}

@@ -129,7 +129,9 @@ export default function Products() {
                       {product.Presentation?.presentation}
                     </td>
                     <td className="py-4 pr-2">{product.quantity}</td>
-                    <td className="py-4 pr-2">####</td>
+                    <td className="py-4 pr-2">
+                      {product.Stocks[0]?.stock ?? 0}
+                    </td>
                     <td className="py-4 pr-2">{product.price}</td>
                     <td className="py-4 text-sky-500 underline">
                       <button

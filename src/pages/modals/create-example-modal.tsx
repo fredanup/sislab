@@ -25,6 +25,7 @@ export default function CreateExampleModal({
   const createExample = trpc.example.createExample.useMutation({
     onSettled: async () => {
       await utils.example.findUserExamples.invalidate();
+      await utils.product.findManyProduct.invalidate();
     },
     onError: (error) => {
       console.error('Error creating example:', error);

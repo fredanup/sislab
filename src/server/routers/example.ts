@@ -47,14 +47,45 @@ export const exampleRouter = createTRPCRouter({
     .input(createExampleSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        await ctx.prisma.example.create({          
+        // Crear el nuevo registro en la tabla Example
+        const example = await ctx.prisma.example.create({          
           data: {                
-              productId: input.productId,                
-              branchId: input.branchId,
-              saleId:input.saleId,
-              isAvailable:input.isAvailable,               
+            productId: input.productId,                
+            branchId: input.branchId,
+            saleId: input.saleId,
+            isAvailable: input.isAvailable,               
           },
         });
+  
+        // Verificar si ya existe un registro en Stock para este producto y sucursal
+        const existingStock = await ctx.prisma.stock.findFirst({
+          where: {
+            productId: example.productId,
+            branchId: example.branchId,
+          },
+        });
+  
+        if (existingStock) {
+          // Si existe, incrementar el stock en 1
+          await ctx.prisma.stock.update({
+            where: {
+              id: existingStock.id, // Asumiendo que 'id' es el identificador de la tabla 'Stock'
+            },
+            data: {
+              stock: { increment: 1 },
+            },
+          });
+        } else {
+          // Si no existe, crear un nuevo registro de stock
+          await ctx.prisma.stock.create({
+            data: {
+              stock: 1,
+              branchId: example.branchId,
+              productId: example.productId,
+            },
+          });
+        }
+  
       } catch (error) {
         console.log(error);
       }
@@ -68,13 +99,32 @@ export const exampleRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const { saleId, exampleId } = input; // Destructurar los valores de entrada
-        await ctx.prisma.example.update({ 
+        const example = await ctx.prisma.example.update({ 
           where: { id: exampleId }, // Usar exampleId para buscar el ejemplo
           data: {                
             saleId: saleId,
             isAvailable: false,               
           },
         });
+         // Verificar si ya existe un registro en Stock para este producto y sucursal
+         const existingStock = await ctx.prisma.stock.findFirst({
+          where: {
+            productId: example.productId,
+            branchId: example.branchId,
+          },
+        });
+  
+        if (existingStock) {
+          // Si existe, incrementar el stock en 1
+          await ctx.prisma.stock.update({
+            where: {
+              id: existingStock.id, // Asumiendo que 'id' es el identificador de la tabla 'Stock'
+            },
+            data: {
+              stock: { decrement: 1 },
+            },
+          });
+        } 
       } catch (error) {
         console.error(error);
       }
