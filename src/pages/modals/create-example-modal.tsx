@@ -1,5 +1,5 @@
 import FormTitle from 'pages/utilities/form-title';
-import { FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { trpc } from 'utils/trpc';
 
 export default function CreateExampleModal({
@@ -12,6 +12,7 @@ export default function CreateExampleModal({
   const [search, setSearch] = useState('');
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const [branchId, setBranchId] = useState<string>('');
+  const [quantity, setQuantity] = useState<string>('');
   const utils = trpc.useContext();
   /**
    * Consultas a base de datos
@@ -31,6 +32,14 @@ export default function CreateExampleModal({
       console.error('Error creating example:', error);
     },
   });
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
+    // Validar que se ingresen números o números con decimales
+    if (/^\d*\.?\d*$/.test(value)) {
+      setQuantity(value);
+    }
+  };
 
   useEffect(() => {
     if (currentUser) {
@@ -47,8 +56,10 @@ export default function CreateExampleModal({
       saleId: null,
       isAvailable: true,
     };
-
-    createExample.mutate(exampleData);
+    const exampleQuantity = parseFloat(quantity);
+    for (let index = 0; index < exampleQuantity; index++) {
+      createExample.mutate(exampleData);
+    }
 
     onClose();
     setSelectedProductId('');
@@ -72,11 +83,12 @@ export default function CreateExampleModal({
         <p className="text-sm font-light">
           Seleccione el ejemplar que desea agregar:
         </p>
+
         <div className="mt-4 items-center flex md:flex-row flex-col gap-4">
-          <div className="flex flex-row gap-2 w-full">
+          <div className="flex flex-row gap-2 w-full items-center">
             <svg
               viewBox="0 0 512 512"
-              className="h-8 w-8 cursor-pointer fill-gray-500 p-1.5"
+              className="h-6 w-6 cursor-pointer fill-gray-500"
             >
               <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
             </svg>
@@ -86,6 +98,21 @@ export default function CreateExampleModal({
               className="w-full appearance-none rounded-lg border px-2 py-1 leading-tight text-gray-700 focus:outline-none"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
+            />
+            <svg
+              viewBox="0 0 448 512"
+              className="h-5 w-5 cursor-pointer fill-gray-500"
+            >
+              <path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128l95.1 0 11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128l58.2 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-68.9 0L325.8 320l58.2 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-68.9 0-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7-95.1 0-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384 32 384c-17.7 0-32-14.3-32-32s14.3-32 32-32l68.9 0 21.3-128L64 192c-17.7 0-32-14.3-32-32s14.3-32 32-32l68.9 0 11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320l95.1 0 21.3-128-95.1 0z" />
+            </svg>
+
+            <input
+              type="text"
+              placeholder="Cantidad"
+              className="focus:shadow-outline w-32 appearance-none rounded-lg border px-2 py-1 leading-tight text-gray-700 focus:outline-none"
+              value={quantity}
+              onChange={handleChange}
+              required
             />
           </div>
         </div>
