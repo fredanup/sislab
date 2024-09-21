@@ -116,8 +116,8 @@ export default function ExamplesModal({
         <>
           {/* Fondo borroso y no interactivo */}
           <div className={overlayClassName}></div>
-          <div className="fixed inset-0 flex items-center justify-center z-30">
-            <form className="w-11/12 md:w-1/2 flex flex-col gap-2 rounded-lg bg-white p-6 drop-shadow-lg">
+          <form className="fixed inset-0 z-30 flex items-center justify-center p-4 mb-4">
+            <div className="max-h-[calc(100%-5rem)] overflow-y-auto flex flex-col gap-2 rounded-lg bg-white p-6 drop-shadow-lg">
               {/**Header y botón de cierre */}
               <div className="flex flex-row justify-between">
                 <FormTitle text="Inventario" />
@@ -283,8 +283,8 @@ export default function ExamplesModal({
                   </tbody>
                 </table>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
 
           {exampleIsOpen && (
             <CreateExampleModal

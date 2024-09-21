@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import CreateProductModal from 'pages/modals/create-product-modal';
 import DeleteProductModal from 'pages/modals/delete-product-modal';
 import ExamplesModal from 'pages/modals/examples-modal';
@@ -22,11 +23,15 @@ export default function Products() {
   //Hook de estado que controla la apertura del modal de movimiento
   const [movementIsOpen, setMovementIsOpen] = useState(false);
 
+  // Obtener la sesión de la BD
+  const { status } = useSession();
   /**
    * Consultas a base de datos
    */
   //Obtener todos los usuarios creados con su sucursal
-  const { data: products } = trpc.product.findManyProduct.useQuery();
+  const { data: products } = trpc.product.findManyProduct.useQuery(undefined, {
+    enabled: status === 'authenticated',
+  });
   //Función de selección de registro y apertura de modal de edición
   const openEditModal = (product: IProductDetail | null) => {
     setSelectedProduct(product);
