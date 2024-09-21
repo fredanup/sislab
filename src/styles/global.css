@@ -18,4 +18,9 @@
   .custom-bullet-color li::marker {
     color: #0ea5e9; /* Cambia 'red' al color que prefieras */
   }
+  .truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }

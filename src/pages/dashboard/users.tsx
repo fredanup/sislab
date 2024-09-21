@@ -87,22 +87,23 @@ export default function Users() {
       <Layout>
         <FormTitle text="Gestión de usuarios" />
         <div className="overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead className="border-b border-gray-200 text-left text-black text-sm font-light">
+          <table className="min-w-full table-auto border-collapse rounded-lg shadow-md overflow-hidden">
+            <thead className="bg-gray-100 text-left text-black font-medium">
               <tr>
-                <th className="py-4 pr-2">Usuarios</th>
-                <th className="py-4 pr-2">Rol</th>
-                <th className="py-4 pr-2">Sucursal</th>
-                <th className="py-4 pr-2">Acciones</th>
+                <th className="py-4 px-6">Usuarios</th>
+                <th className="py-4 px-6">Rol</th>
+                <th className="py-4 px-6">Sucursal</th>
+                <th className="py-4 px-6">Acciones</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white text-gray-700">
               {users?.map((user, index) => (
                 <>
                   <tr
-                    className="border-b border-gray-200 text-sm font-light"
+                    className={`border-b transition-colors duration-200 ${
+                      index % 2 === 0 ? 'bg-gray-50' : ''
+                    } hover:bg-gray-100`}
                     key={index}
-                    //onClick={() => handleCardClick(user, index)}
                   >
                     <td className="py-4 pr-2 flex flex-row gap-3 items-center text-sm font-light">
                       <Image
@@ -112,13 +113,16 @@ export default function Users() {
                         src={user.image ?? ''}
                         alt="User Avatar"
                       />
-                      <div className="flex flex-col">
-                        <p className="font-medium">{user.name}</p>
+                      <div className="flex flex-col overflow-hidden">
+                        <p className="font-medium truncate max-w-xs">
+                          {user.name}
+                        </p>
                         <p className="font-light text-xs">{user.email}</p>
                       </div>
                     </td>
-                    <td className="py-4 pr-2">{user.role}</td>
-                    <td className="py-4 pr-2">{user.Branch?.name}</td>
+
+                    <td className="py-4 px-6">{user.role}</td>
+                    <td className="py-4 px-6">{user.Branch?.name}</td>
                     <td className="py-4 text-sky-500 underline">
                       <button
                         className="underline mr-4"

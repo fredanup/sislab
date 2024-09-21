@@ -134,30 +134,32 @@ export default function Reports() {
       <Layout>
         <FormTitle text="Reportes" />
         <div className="overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead className="border-b border-gray-200 text-left text-black text-sm font-light">
+          <table className="min-w-full table-auto border-collapse rounded-lg shadow-md overflow-hidden">
+            <thead className="bg-gray-100 text-left text-black font-medium">
               <tr>
-                <th className="py-4 pr-2">Nro. de venta</th>
-                <th className="py-4 pr-2">Descuento</th>
-                <th className="py-4 pr-2">Precio final</th>
-                <th className="py-4 pr-2">Fecha</th>
-                <th className="py-4 pr-2">Detalle</th>
-                <th className="py-4 pr-2">Reporte</th>
+                <th className="py-4 px-6">Nro</th>
+                <th className="py-4 px-6">Descuento</th>
+                <th className="py-4 px-6">Precio final</th>
+                <th className="py-4 px-6">Fecha</th>
+                <th className="py-4 px-6">Detalle</th>
+                <th className="py-4 px-6">Reporte</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white text-gray-700">
               {sales?.map((sale, index) => (
                 <tr
-                  className="border-b border-gray-200 text-sm font-light"
+                  className={`border-b transition-colors duration-200 ${
+                    index % 2 === 0 ? 'bg-gray-50' : ''
+                  } hover:bg-gray-100`}
                   key={index}
                 >
-                  <td className="py-4 pr-2">{index + 1}</td>
-                  <td className="py-4 pr-2">{sale.discount}</td>
-                  <td className="py-4 pr-2">{sale.finalPrice}</td>
-                  <td className="py-4 pr-2">
+                  <td className="py-4 px-6">{index + 1}</td>
+                  <td className="py-4 px-6">{sale.discount}</td>
+                  <td className="py-4 px-6">{sale.finalPrice}</td>
+                  <td className="py-4 px-6">
                     {sale.saleDate.toLocaleDateString()}
                   </td>
-                  <td className="py-4 pr-2">
+                  <td className="py-4 px-6">
                     <svg
                       viewBox="0 0 512 512"
                       className="h-8 w-8 cursor-pointer fill-gray-500 p-1.5"
@@ -169,7 +171,7 @@ export default function Reports() {
                       <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                     </svg>
                   </td>
-                  <td className="py-4 pr-2">
+                  <td className="py-4 px-6">
                     <svg
                       viewBox="0 0 512 512"
                       className="h-8 w-8 cursor-pointer fill-gray-500 p-1.5"
