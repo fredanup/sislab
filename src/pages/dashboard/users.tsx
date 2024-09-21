@@ -86,63 +86,66 @@ export default function Users() {
     <>
       <Layout>
         <FormTitle text="Gestión de usuarios" />
-        <table className="table-auto">
-          <thead className="border-b border-gray-200 text-left text-black text-sm font-light">
-            <tr>
-              <th className="py-4 pr-2">Usuarios</th>
-              <th className="py-4 pr-2">Rol</th>
-              <th className="py-4 pr-2">Sucursal</th>
-              <th className="py-4 pr-2">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users?.map((user, index) => (
-              <>
-                <tr
-                  className="border-b border-gray-200 text-sm font-light"
-                  key={index}
-                  //onClick={() => handleCardClick(user, index)}
-                >
-                  <td className="py-4 pr-2 flex flex-row gap-3 items-center text-sm font-light">
-                    <Image
-                      className="rounded-full"
-                      width={50}
-                      height={50}
-                      src={user.image ?? ''}
-                      alt="User Avatar"
-                    />
-                    <div className="flex flex-col">
-                      <p className="font-medium">{user.name}</p>
-                      <p className="font-light text-xs">{user.email}</p>
-                    </div>
-                  </td>
-                  <td className="py-4 pr-2">{user.role}</td>
-                  <td className="py-4 pr-2">{user.Branch?.name}</td>
-                  <td className="py-4 text-sky-500 underline">
-                    <button
-                      className="underline mr-4"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        openEditModal(user);
-                      }}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="underline"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        openDeleteModal(user);
-                      }}
-                    >
-                      Eliminar
-                    </button>
-                  </td>
-                </tr>
-              </>
-            ))}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto">
+            <thead className="border-b border-gray-200 text-left text-black text-sm font-light">
+              <tr>
+                <th className="py-4 pr-2">Usuarios</th>
+                <th className="py-4 pr-2">Rol</th>
+                <th className="py-4 pr-2">Sucursal</th>
+                <th className="py-4 pr-2">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users?.map((user, index) => (
+                <>
+                  <tr
+                    className="border-b border-gray-200 text-sm font-light"
+                    key={index}
+                    //onClick={() => handleCardClick(user, index)}
+                  >
+                    <td className="py-4 pr-2 flex flex-row gap-3 items-center text-sm font-light">
+                      <Image
+                        className="rounded-full"
+                        width={50}
+                        height={50}
+                        src={user.image ?? ''}
+                        alt="User Avatar"
+                      />
+                      <div className="flex flex-col">
+                        <p className="font-medium">{user.name}</p>
+                        <p className="font-light text-xs">{user.email}</p>
+                      </div>
+                    </td>
+                    <td className="py-4 pr-2">{user.role}</td>
+                    <td className="py-4 pr-2">{user.Branch?.name}</td>
+                    <td className="py-4 text-sky-500 underline">
+                      <button
+                        className="underline mr-4"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          openEditModal(user);
+                        }}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="underline"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          openDeleteModal(user);
+                        }}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         {editIsOpen && (
           <UpdateUserModal
             isOpen={editIsOpen}
