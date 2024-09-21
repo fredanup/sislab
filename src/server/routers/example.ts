@@ -47,49 +47,49 @@ export const exampleRouter = createTRPCRouter({
     .input(createExampleSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        // Crear el nuevo registro en la tabla Example
-        const example = await ctx.prisma.example.create({          
-          data: {                
-            productId: input.productId,                
+        // Crear varios ejemplares a la vez
+        await ctx.prisma.example.createMany({
+          data: Array.from({ length: input.quantity }, () => ({
+            productId: input.productId,
             branchId: input.branchId,
             saleId: input.saleId,
-            isAvailable: input.isAvailable,               
-          },
+            isAvailable: input.isAvailable,
+          })),
         });
   
         // Verificar si ya existe un registro en Stock para este producto y sucursal
         const existingStock = await ctx.prisma.stock.findFirst({
           where: {
-            productId: example.productId,
-            branchId: example.branchId,
+            productId: input.productId,
+            branchId: input.branchId,
           },
         });
   
         if (existingStock) {
-          // Si existe, incrementar el stock en 1
+          // Si existe, incrementar el stock en la cantidad de ejemplares insertados
           await ctx.prisma.stock.update({
             where: {
               id: existingStock.id, // Asumiendo que 'id' es el identificador de la tabla 'Stock'
             },
             data: {
-              stock: { increment: 1 },
+              stock: { increment: input.quantity },
             },
           });
         } else {
-          // Si no existe, crear un nuevo registro de stock
+          // Si no existe, crear un nuevo registro de stock con la cantidad de ejemplares
           await ctx.prisma.stock.create({
             data: {
-              stock: 1,
-              branchId: example.branchId,
-              productId: example.productId,
+              stock: input.quantity,
+              branchId: input.branchId,
+              productId: input.productId,
             },
           });
         }
-  
       } catch (error) {
         console.log(error);
       }
     }),
+  
 
     updateExample: protectedProcedure
     .input(z.object({

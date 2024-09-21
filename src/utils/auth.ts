@@ -73,7 +73,7 @@ export const userBranchSchema = z.object({
     branchId: z.string(),
     saleId:z.string().nullable(),
     isAvailable:z.boolean(), 
-    
+    quantity:z.number()
   });
 
   export const createMovementSchema = z.object({  
