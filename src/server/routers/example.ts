@@ -4,6 +4,7 @@ import { createExampleSchema } from "../../utils/auth";
 import { z } from "zod";
 import { nanoid } from "nanoid";
 
+
 export const exampleRouter = createTRPCRouter({
     //Obtener todos los ejemplares de la sucursal del usuario actual
     findUserExamples: publicProcedure.input(z.string()).query(async ({input}) => {      
