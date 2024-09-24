@@ -48,7 +48,7 @@ export const exampleRouter = createTRPCRouter({
     .input(createExampleSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-const {nanoId}=await import('nanoid');
+const {nanoid}=await import('nanoid');
         // Crear varios ejemplares a la vez
         await ctx.prisma.example.createMany({
           data: Array.from({ length: input.quantity }, () => ({
