@@ -35,7 +35,7 @@ export default function SaleModal({
                   <th className="py-4 pX-6">Producto</th>
                   <th className="py-4 pX-6">Laboratorio</th>
                   <th className="py-4 pX-6">Presentación</th>
-                  <th className="py-4 pX-6">Cantidad</th>
+                  <th className="py-4 pX-6">Capacidad</th>
                   <th className="py-4 pX-6">Precio</th>
                 </tr>
               </thead>
@@ -57,7 +57,7 @@ export default function SaleModal({
                         {sale.Product?.Presentation?.presentation}
                       </td>
                       <td className="py-4 pX-6">{sale.Product?.quantity}</td>
-                      <td className="py-4 pX-6">{sale.Product?.price}</td>
+                      <td className="py-4 pX-6">S/. {sale.Product?.price}</td>
                     </tr>
                   </>
                 ))}

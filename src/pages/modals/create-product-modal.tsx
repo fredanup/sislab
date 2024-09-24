@@ -226,9 +226,7 @@ export default function CreateProductModal({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-black text-sm font-bold">
-              Cantidad por presentación:
-            </label>
+            <label className="text-black text-sm font-bold">Capacidad:</label>
             <input
               type="text"
               className="focus:shadow-outline w-full appearance-none rounded-lg border px-2 py-1 leading-tight text-gray-700 focus:outline-none"

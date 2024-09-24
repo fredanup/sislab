@@ -2,6 +2,7 @@ import { prisma } from "../prisma";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { createExampleSchema } from "../../utils/auth";
 import { z } from "zod";
+import { nanoid } from "nanoid";
 
 export const exampleRouter = createTRPCRouter({
     //Obtener todos los ejemplares de la sucursal del usuario actual
@@ -50,6 +51,7 @@ export const exampleRouter = createTRPCRouter({
         // Crear varios ejemplares a la vez
         await ctx.prisma.example.createMany({
           data: Array.from({ length: input.quantity }, () => ({
+            id: nanoid(10),
             productId: input.productId,
             branchId: input.branchId,
             saleId: input.saleId,

@@ -148,7 +148,9 @@ export default function CreateSaleModal({
             {selectedExamples?.map((example) => (
               <li key={example.id} className="py-1">
                 <span>{example.Product?.name}</span> {/* Nombre */}
-                <span className="float-right">{example.Product?.price}.00</span>
+                <span className="float-right">
+                  S/. {example.Product?.price}.00
+                </span>
                 {/* Precio alineado a la derecha */}
               </li>
             ))}
@@ -156,7 +158,7 @@ export default function CreateSaleModal({
         </div>
         <div className="flex flex-row justify-between">
           <h2 className="text-lg font-semibold mb-2">Precio total</h2>
-          <p className="font-semibold pr-2">{finalPrice}</p>
+          <p className="font-semibold pr-2">S/. {finalPrice}</p>
         </div>
 
         <div className="mt-4 pt-4 flex flex-row justify-end gap-2 border-t border-gray-200">

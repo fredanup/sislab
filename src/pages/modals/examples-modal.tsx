@@ -239,7 +239,7 @@ export default function ExamplesModal({
                       <th className="py-4 pr-2">Producto</th>
                       <th className="py-4 pr-2">Laboratorio</th>
                       <th className="py-4 pr-2">Presentación</th>
-                      <th className="py-4 pr-2">Cantidad</th>
+                      <th className="py-4 pr-2">Capacidad</th>
                       <th className="py-4 pr-2">Precio</th>
                       <th className="py-4 pr-2">Disponible</th>
                     </tr>
@@ -272,7 +272,7 @@ export default function ExamplesModal({
                             {example.Product?.quantity}
                           </td>
                           <td className="py-4 pr-2">
-                            {example.Product?.price}
+                            S/. {example.Product?.price}
                           </td>
                           <td className="py-4 pr-2">
                             {example.isAvailable ? 'Si' : 'No'}

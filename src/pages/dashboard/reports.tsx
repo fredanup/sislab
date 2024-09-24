@@ -61,49 +61,63 @@ export default function Reports() {
 
       const doc = new jsPDF();
 
-      doc.addImage('/logo.png', 'PNG', 10, 10, 50, 20);
-      doc.setFontSize(18);
-      doc.text('Reporte de Venta', 105, 20, { align: 'center' });
+      // Agregar logo (centrado y con color verde)
+      doc.addImage('/logo.png', 'PNG', 80, 10, 50, 20);
 
+      // Título del reporte (mantiene el color negro minimalista)
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.text('Reporte de Venta', 105, 40, { align: 'center' });
+
+      // Detalles de la venta (fuente ligera y minimalista)
       doc.setFontSize(12);
-      doc.text(`Nro. de venta: ${sale.id}`, 10, 40);
-      doc.text(`Descuento: - ${sale.discount} soles`, 10, 50);
-      doc.text(`Precio final: ${sale.finalPrice}`, 10, 60);
+      doc.setFont('Helvetica', 'normal');
+      doc.text(`Cod. de venta: ${sale.id}`, 10, 60);
+      doc.text(`Descuento: - S/.${sale.discount}`, 10, 70);
+      doc.text(`Precio final: S/.${sale.finalPrice}`, 10, 80);
       doc.text(
         `Fecha: ${new Date(sale.saleDate).toLocaleDateString()}`,
         10,
-        70,
+        90,
       );
 
-      doc.line(10, 80, 200, 80);
+      // Línea divisoria (ajustada al verde del logotipo)
+      doc.setDrawColor(0, 150, 64); // Verde del logo
+      doc.line(10, 100, 200, 100);
 
+      // Columnas de la tabla
       const tableColumns = [
         { header: 'Item', dataKey: 'item' },
         { header: 'Producto', dataKey: 'product' },
         { header: 'Laboratorio', dataKey: 'lab' },
         { header: 'Presentación', dataKey: 'presentation' },
-        { header: 'Cantidad', dataKey: 'quantity' },
+        { header: 'Capacidad', dataKey: 'quantity' },
         { header: 'Precio', dataKey: 'price' },
       ];
 
+      // Filas de la tabla
       const tableRows = userSales.map((item, index) => ({
         item: index + 1,
         product: item.Product?.name || '',
         lab: item.Product?.Laboratory?.name || '',
         presentation: item.Product?.Presentation?.presentation || '',
         quantity: item.Product?.quantity || '',
-        price: item.Product?.price || '',
+        price: 'S/.' + item.Product?.price || '',
       }));
 
+      // Estilizar la tabla (verde del logotipo para los encabezados)
       (doc as any).autoTable({
         head: [tableColumns.map((column) => column.header)],
         body: tableRows.map((row) => Object.values(row)),
-        startY: 90,
+        startY: 110,
         theme: 'grid',
-        headStyles: { fillColor: [171, 205, 223] },
-        styles: { fontSize: 10 },
+        headStyles: { fillColor: [0, 150, 64], textColor: [255, 255, 255] }, // Verde del logo con texto blanco
+        styles: { fontSize: 10, textColor: [50, 50, 50] }, // Texto gris oscuro para un estilo sobrio
+        tableLineColor: [220, 220, 220], // Líneas muy finas y suaves (gris claro)
+        tableLineWidth: 0.1,
       });
 
+      // Guardar el PDF
       doc.save(`Reporte-Venta-${sale.id}.pdf`);
     },
     [userSales],

@@ -127,7 +127,7 @@ export default function Products() {
                 <th className="py-4 px-6">Producto</th>
                 <th className="py-4 px-6">Laboratorio</th>
                 <th className="py-4 px-6">Presentación</th>
-                <th className="py-4 px-6">Cantidad</th>
+                <th className="py-4 px-6">Capacidad</th>
                 <th className="py-4 px-6">Stock</th>
                 <th className="py-4 px-6">Precio</th>
                 <th className="py-4 px-6">Acciones</th>
@@ -148,7 +148,7 @@ export default function Products() {
                   </td>
                   <td className="py-4 px-6">{product.quantity}</td>
                   <td className="py-4 px-6">{product.Stocks[0]?.stock ?? 0}</td>
-                  <td className="py-4 px-6">{product.price}</td>
+                  <td className="py-4 px-6">S/. {product.price}</td>
                   <td className="py-4 px-6 text-sky-500 underline">
                     <button
                       className="underline mr-4"
