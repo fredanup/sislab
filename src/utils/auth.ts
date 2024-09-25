@@ -68,7 +68,7 @@ export const userBranchSchema = z.object({
     id:z.string(),  
   });
 
-  export const createExampleSchema = z.object({  
+  export const createExampleSchema = z.object({    
     productId: z.string(),   
     branchId: z.string(),
     saleId:z.string().nullable(),

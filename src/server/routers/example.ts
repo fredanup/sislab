@@ -2,7 +2,8 @@ import { prisma } from "../prisma";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { createExampleSchema } from "../../utils/auth";
 import { z } from "zod";
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
+
 
 
 export const exampleRouter = createTRPCRouter({
